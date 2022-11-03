@@ -17,11 +17,11 @@ namespace Demo_ASP_MVC_06_Session.DAL.Repositories
 
         public override int Add(Message entity)
         {
-            IDbCommand cmd = _connection.CreateQueryCommand("INSERT INTO [Message](Content, Create_At, Member_Id OUPUT [inserted].[Member_Id] VALUES (@Content, @CreateAt, @MemberId)");
+            IDbCommand cmd = _connection.CreateQueryCommand("INSERT INTO [Message](Content, Create_At, Member_Id) OUTPUT [inserted].[Message_Id] VALUES (@Content, GETDATE(), @MemberId)");
 
             cmd.AddParam("@Content", entity.Content);
-            cmd.AddParam("@CreateAt", entity.CreateAt);
-            cmd.AddParam("@MemberId", entity.CreateAt);
+            
+            cmd.AddParam("@MemberId", entity.MemberId);
 
             _connection.Open();
 
@@ -59,6 +59,19 @@ namespace Demo_ASP_MVC_06_Session.DAL.Repositories
             _connection.Close();
         }
 
+        public IEnumerable<Message> GetByMemberId(int id)
+        {
+            IDbCommand cmd = _connection.CreateQueryCommand("SELECT * FROM [Message] WHERE (Member_Id = @id)");
+            cmd.AddParam("@id", id);
+
+            _connection.Open();
+
+            using (IDataReader reader = cmd.ExecuteReader())
+                while (reader.Read())
+                    yield return Mapper(reader);
+
+            _connection.Close();
+        }
         public override Message? GetById(int id)
         {
             IDbCommand cmd = _connection.CreateQueryCommand("SELECT * FROM [Message] WHERE  [Message_Id] = @Id");
@@ -70,7 +83,7 @@ namespace Demo_ASP_MVC_06_Session.DAL.Repositories
             _connection.Open();
 
             using (IDataReader reader = cmd.ExecuteReader())
-                while (reader.Read())
+                if (reader.Read())
                 {
                     cpt++;
                     message = Mapper(reader);
@@ -105,7 +118,7 @@ namespace Demo_ASP_MVC_06_Session.DAL.Repositories
             {
                 MessageId = (int)record["Message_Id"],
                 Content = (string)record["Content"],
-                CreateAt = (DateTime)record["Creat_At"],
+                CreateAt = (DateTime)record["Create_At"],
                 MemberId = (int)record["Member_id"],
             };
         }

@@ -9,6 +9,6 @@ namespace Demo_ASP_MVC_06_Session.DAL.Interfaces
 {
     public interface IMessageRepository : IRepositoryBase<int, Message>
     {
-        
+        public IEnumerable<Message> GetByMemberId(int id);
     }
 }

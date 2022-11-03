@@ -22,8 +22,10 @@ builder.Services.AddScoped<IDbConnection>(sp =>
     return new SqlConnection(builder.Configuration.GetConnectionString("default"));
 });
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.AddScoped<TokenManager>();
+builder.Services.AddScoped<IMessageService, MessageServices>();
 
 // Validation du token pour voir qui peut se connecter
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

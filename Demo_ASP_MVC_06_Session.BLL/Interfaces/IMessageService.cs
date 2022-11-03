@@ -6,9 +6,11 @@ using Demo_ASP_MVC_06_Session.Domain.Entities;
 
 namespace Demo_ASP_MVC_06_Session.BLL.Interfaces
 {
-    internal interface IMessageService
+    public interface IMessageService
     {
-        public Message? Write(Message message);
+        public Message Write(Message message);
         public IEnumerable<Message> Read();
+        public bool Delete(int id);
+        public Message GetById(int id);
     }
 }

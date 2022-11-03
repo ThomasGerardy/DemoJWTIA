@@ -24,5 +24,12 @@ namespace DemoJWTIA.Mappers
                 MemberId = member.MemberId,
             };
         }
+        public static Message MessageToBll(this MessageViewModel m)
+        {
+            return new Message
+            {
+                Content = m.Content,
+            };
+        }
     }
 }
